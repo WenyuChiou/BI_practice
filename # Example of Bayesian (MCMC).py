@@ -44,14 +44,15 @@ def model(coeff):
         
     #Plot the histogram of estimated salary levels
     
-    # fig, ax1 = plt.subplots(figsize=(10, 5))
+    fig, ax1 = plt.subplots(figsize=(10, 5))
    
-    # ax1.hist( sl,  
-    #       bins=np.arange(sl.min(), sl.max()+1000, 1000), 
-    #       rwidth=0.5 )
+    ax1.hist( sl,  
+          bins=np.arange(sl.min(), sl.max()+1000, 1000), 
+          rwidth=0.5 )
     
-    # ax1.set_xlabel('X')
-    # ax1.set_ylabel('Probability Density')
+    ax1.set_xlabel('X')
+    ax1.set_ylabel('Probability Density')
+    plt.show()
     
     #Calcualted the mean and standard deviation of estimated salary levels
     mu, std = norm.fit(sl)
@@ -114,7 +115,7 @@ def main(p0,nwalkers,niter,ndim,lnprob,data):
 
     return sampler, pos, prob, state
 
-sampler, pos, prob, state = main(p0,nwalkers,niter,ndim,lnprob,data)
+# sampler, pos, prob, state = main(p0,nwalkers,niter,ndim,lnprob,data)
 
 
 
