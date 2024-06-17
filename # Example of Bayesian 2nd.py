@@ -82,7 +82,7 @@ def model_prior(x,mu,std):
     return N_dist
 
 def likelihood_func(datum, mu, std):
-    likelihood_out = sts.norm.pdf(datum, mu, std) #Note that mu here is an array of values, so the output is also
+    likelihood_out = sts.gamma.pdf(datum, mu, std) #Note that mu here is an array of values, so the output is also
     
     # fig, ax1 = plt.subplots(figsize=(10, 5))
     # ax1.plot(datum, likelihood_out)
@@ -108,45 +108,9 @@ filename= 'data1.csv'
 
 
 # 1st Bayesian update
-# prior: modeling data with given coefficients (Beta0, Beta1, Beta2)
-beta0 = sts.norm.rvs(5,1,100)
-beta1 = sts.norm.rvs(8,2,100)   
 model_data = model([5,8,8],dir,filename)
 _,_,true_data = read_data(dir,filename)
 
-prior = model_prior(model_data,np.mean(model_data),np.std(model_data)) 
-likelihood = likelihood_func(true_data,np.mean(true_data),np.std(true_data))
-posterior2 = posterior(prior, likelihood, true_data)
-prior = posterior2
-posterior_dict = {'posteriror':list()}
-tt = 0
 
-# Iteraiont of Bayesian update
-# fig, ax1 = plt.subplots(figsize=(10, 5))
-
-for ind, rand_beta0 in enumerate(beta0):
-    for ind, rand_bet1 in enumerate(beta1):
-        tt += 1
-        model_data = model([rand_beta0,8,8],dir,filename)
-        likelihood_func(model_data,np.mean(model_data),np.std(model_data))
-        posterior2 = posterior(prior, likelihood, true_data)
-        # posterior_dict['posteriror'].append(posterior2)
-        # print(posterior_dict['posteriror'])
-        
-        if (tt%1000 == 0):
-            plt.plot(model_data,posterior2, label = f'Model at {tt} time of iteration')
-
-            
-        prior = posterior2
-
-plt.legend()
-plt.show()  
-    
-
-# fig, ax1 = plt.subplots(figsize=(10, 5))
-# ax1.plot(true_data,posterior2)
-# plt.show()
-# # plt.plot(posterior2)
-# # plt.show()
 
 
