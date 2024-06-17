@@ -70,24 +70,26 @@ def model(coeff,dir,file_name):
        
     return sorted(sl)
 
+# Assume the prior distribution is corresponding with normal distribution 
 def model_prior(x,mu,std):
     N_dist = norm.pdf(x,mu,std)
     N_dist = N_dist/N_dist.sum() #Normalized 
     
-    fig, ax1 = plt.subplots(figsize=(10, 5))
-    ax1.plot(x, N_dist)
-    ax1.set_title('PDF of prior')
-    plt.show()
+    # fig, ax1 = plt.subplots(figsize=(10, 5))
+    # ax1.plot(x, N_dist)
+    # ax1.set_title('PDF of prior')
+    # plt.show()
     
     return N_dist
 
+# Assume the prior distribution is corresponding with gamma distribution 
 def likelihood_func(datum, mu, std):
     likelihood_out = sts.gamma.pdf(datum, mu, std) #Note that mu here is an array of values, so the output is also
     
     # fig, ax1 = plt.subplots(figsize=(10, 5))
     # ax1.plot(datum, likelihood_out)
     # ax1.set_title('PDF of likelihood')
-    #plt.show()
+    # plt.show()
     
     return likelihood_out/likelihood_out.sum()
 
@@ -100,9 +102,6 @@ def posterior(prior,likihood, obs_data):
     return posterior
 
 
-
-
-
 dir = r'C:\Users\user\Desktop\Lehigh\pre-phd\BayesianStatistics_HawjengChiou\Ch01'
 filename= 'data1.csv'
 
@@ -110,6 +109,30 @@ filename= 'data1.csv'
 # 1st Bayesian update
 model_data = model([5,8,8],dir,filename)
 _,_,true_data = read_data(dir,filename)
+
+
+#prior 
+pr = sts.norm.rvs(0,10**6,100)
+    
+for ii in range(4):
+    data_10 = true_data[0+100*ii : 100+100*ii]# the last 10 data 
+    
+    mm, std = np.mean(data_10), np.std(data_10)
+
+    # likelihood function
+    like = likelihood_func(data_10, mm, std)
+
+    #posterior
+    ps = posterior(pr, like, data_10)
+    
+    pr = ps
+    
+    if ii%1 == 0:
+
+        plt.plot(data_10,ps, label = f'posterior (iteration time: {ii*100})')
+plt.legend()
+plt.show()
+
 
 
 
